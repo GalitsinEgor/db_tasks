@@ -1,0 +1,93 @@
+/*Выведите все фамилии служащих, в которых есть буквы "a" и "y"*/
+select LAST_NAME from hr.employees where LAST_NAME like '%a%' and LAST_NAME like '%y%'
+
+/**/
+
+Выведите фамилии и номера служащих вместе с фамилиями и номерами их менеджеров. Назовите столбцы Employee, Emp#, Manager и Mgr#
+select emp.LAST_NAME as Employee, emp.EMPLOYEE_ID as Emp#, mngr.LAST_NAME as Manager, mngr.EMPLOYEE_ID as Mgr# from hr.employees emp
+join hr.employees mngr
+on emp.MANAGER_ID = mngr.EMPLOYEE_ID;
+
+/**/
+
+Отделу HR необходим отчет, в котором выводятся фамилии, номера отделов и должности служащих, идентификатор местоположения отдела которых равен 1700.
+select emp.LAST_NAME, emp.DEPARTMENT_ID, emp.JOB_ID from employees emp
+join DEPARTMENTS dpt
+on dpt.DEPARTMENT_ID = emp.DEPARTMENT_ID
+where dpt.LOCATION_ID = 1700
+
+/**/
+
+"Вывести фамилию сотрудника и рассчитать количество месяцев между
+сегодня и датой его найма. Столбец c количеством месяцев назвать MONTHS_WORKED. Отсортировать данные по 2-му полю. Округлить до ближайшего целого."
+select LAST_NAME, round(MONTHS_BETWEEN(CURRENT_DATE, HIRE_DATE)) as MONTHS_WORKED from EMPLOYEES order by MONTHS_WORKED 
+
+/**/
+
+Отделу HR необходим отчет, в котором выводится следующее: - фамилии и отделы всех сотрудников из таблицы EMPLOYEES, независимо от того, относятся ли они к какому-то отделу или нет; - номера и наименования всех отделов из таблицы DEPARTMENTS, независимо от того, есть ли в них сотрудники или нет. Для получения отчета напишите составной запрос.
+SELECT LAST_NAME, department_id, NULL
+FROM employees
+UNION
+SELECT NULL, department_id, department_name
+FROM departments
+
+/**/
+
+Команда SELECT содержит 4 ошибки:
+
+SELECT employee_id, last_name
+sal x 12 ANNUAL SALARY
+FROM employees
+
+Исправьте их.
+SELECT EMPLOYEE_ID, LAST_NAME,
+(SALARY * 12) as "ANNUAL SALARY"
+FROM employees
+
+/**/
+
+Отделу по работе с персоналом (Human Resources, HR) необходимы данные, включающие фамилию, код должности, дату найма и табельный номер для каждого служащего. Табельный номер должен выводиться первым. Определите псевдоним STARTDATE для столбца HIRE_DATE.
+SELECT EMPLOYEE_ID, LAST_NAME, JOB_ID, HIRE_DATE as STARTDATE FROM employees
+
+/**/
+
+Отдел по работе с персоналом запрашивает данные о всех должностях из таблицы EMPLOYEES. В выводимых результатах идентификаторы должностей не должны повторяться.
+SELECT JOB_ID FROM employees group by JOB_ID
+
+/**/
+
+Отделу HR необходимы соответствующие заголовки в отчете о служащих. Назовите столбцы Emp #, Employee, Job и Hire Date. Отсортируйте по первому полю.
+SELECT EMPLOYEE_ID as Emp#, LAST_NAME as Employee, JOB_ID as Job, HIRE_DATE as "Hire Date" FROM employees order by EMPLOYEE_ID
+
+/**/
+
+Отделу HR необходим отчет о всех сотрудниках и идентификаторах их должностей. Выведите на экран имя, соединенное с идентификатором должности через запятую и пробел. Назовите новый столбец Employee and Title.
+SELECT (FIRST_NAME||', '||JOB_ID) as "Employee and Title" FROM employees
+
+/**/
+
+Создайте запрос для вывода всех данных из таблицы EMPLOYEES, чтобы познакомиться с ее содержимым таблицы.
+Разделите значения столбцов запятыми и выведите их в одном столбце с наименованием THE_OUTPUT
+SELECT employee_id || ',' || first_name || ',' || last_name || ','|| email || ',' || phone_number || ',' || hire_date || ',' || job_id || ',' || salary || ',' || commission_pct || ',' || manager_id || ','|| department_id "THE_OUTPUT" from employees
+
+/**/
+
+Вследствие проблем финансирования отделу HR необходим отчет, в котором показываются фамилии и оклады служащих, получающих более $12,000. Выполните запрос.
+select LAST_NAME, SALARY from employees where SALARY > 12000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

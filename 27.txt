@@ -1,0 +1,14 @@
+/*Сотрудникам отдела HR не нужны все данные таблицы EMPLOYEES. Включите отделы и количество человек, половина чьей зарплаты
+больше, чем средняя зарплата компании.*/
+
+/*select dp.DEPARTMENT_NAME, emp.LAST_NAME from hr.EMPLOYEES emp
+join hr.DEPARTMENTS dp on (dp.DEPARTMENT_ID = emp.DEPARTMENT_ID)*/
+
+select * from hr.EMPLOYEES e
+where (e.SALARY/2) > (select avg(n.SALARY) from hr.EMPLOYEES n);
+
+
+/*select dp.DEPARTMENT_NAME, count(*) from hr.EMPLOYEES e
+join hr.DEPARTMENTS dp on (dp.DEPARTMENT_ID = e.DEPARTMENT_ID)
+where (e.SALARY/2) > (select avg(n.SALARY) from hr.EMPLOYEES n)
+GROUP BY dp.DEPARTMENT_NAME;*/

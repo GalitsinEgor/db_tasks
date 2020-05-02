@@ -1,0 +1,6 @@
+/*Отделу по работе с персоналом (Human Resources, HR) необходим список номеров отделом, в которых нет сотрудников с идентификатором должности FI_ACCOUNT. Используйте операторы над множествами для создания отчета.*/
+/*select DEPARTMENT_ID from hr.EMPLOYEES where DEPARTMENT_ID not in (select DEPARTMENT_ID from hr.EMPLOYEES where JOB_ID = 'FI_ACCOUNT' group by DEPARTMENT_ID) group by DEPARTMENT_ID order by DEPARTMENT_ID;*/
+
+/*select DEPARTMENT_ID from hr.EMPLOYEES where DEPARTMENT_ID is not null
+minus  
+select DEPARTMENT_ID from hr.EMPLOYEES where JOB_ID like 'FI_ACCOUNT' group by DEPARTMENT_ID*/
