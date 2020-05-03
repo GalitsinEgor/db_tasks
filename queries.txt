@@ -76,6 +76,92 @@ SELECT employee_id || ',' || first_name || ',' || last_name || ','|| email || ',
 select LAST_NAME, SALARY from employees where SALARY > 12000
 
 
+/**/
+
+Создайте запрос для вывода фамилии и номера отдела служащего под номером 176
+select LAST_NAME, DEPARTMENT_ID from employees where EMPLOYEE_ID = 176
+
+/**/
+
+Отделу HR необходимы данные о высокооплачиваемых и низкооплачиваемых сотрудниках. Выведите фамилии и оклады всех служащих, чей оклад не входит в диапазон от $5000 до $12000.
+select LAST_NAME, SALARY from EMPLOYEES where SALARY < 5000 or SALARY > 12000
+
+/**/
+
+Создайте отчет для вывода фамилии, идентификатора должности и даты начала работы всех служащих, с фамилиями Matos и Taylor. Отсортируйте данные в порядке возрастания даты найма.
+select LAST_NAME, JOB_ID, HIRE_DATE from EMPLOYEES where LAST_NAME like 'Matos' or LAST_NAME like 'Taylor' order by HIRE_DATE
+
+/**/
+
+Выведите фамилию и номер отдела всех служащих из отделов 20 и 50. Отсортируйте данные по фамилиям в алфавитном порядке.
+select LAST_NAME, DEPARTMENT_ID from EMPLOYEES where DEPARTMENT_ID = 20 or DEPARTMENT_ID = 50 order by LAST_NAME
+
+/**/
+
+Выведите фамилии и оклады служащих отделов 20 и 50 , зарабатывающих от $5000 до $12,000. Назовите столбцы Employee и Monthly Salary, соответственно.
+select LAST_NAME as "Employee", SALARY as "Monthly Salary" from EMPLOYEES where (DEPARTMENT_ID = 20 or DEPARTMENT_ID = 50) and (SALARY > 5000 and SALARY < 12000)
+
+/**/
+
+Отделу HR необходим отчет, в котором выводятся фамилии и даты найма всех служащих, нанятых в 1994 г.
+select LAST_NAME, HIRE_DATE from EMPLOYEES where HIRE_DATE >= date '1994-01-01' and HIRE_DATE <= date '1995-01-01'
+
+/**/
+
+Создайте отчет, содержащий фамилии и должности всех служащих, не имеющих менеджера.
+select LAST_NAME, JOB_ID from EMPLOYEES where MANAGER_ID is null
+
+/**/
+
+Создайте отчет для вывода фамилий, окладов и комиссионные всех служащих, зарабатывающих комиссионные. Отсортируйте данные в порядке убывания окладов и комиссионных.
+select LAST_NAME, SALARY, COMMISSION_PCT from EMPLOYEES where COMMISSION_PCT is not null order by SALARY desc, COMMISSION_PCT desc 
+
+/**/
+
+Выведите все фамилии служащих, в которых третья буква – a.
+select LAST_NAME from employees where LAST_NAME like '__a%'
+
+/**/
+
+Выведите все фамилии служащих, в которых есть буквы “a” и “e”.
+select LAST_NAME from employees where LAST_NAME like '%a%' and LAST_NAME like '%e%'
+
+/**/
+
+Запросите фамилии, должности и оклады всех служащих, работающих торговыми представителя (SA_REP) или клерками на складе (ST_CLERK), у которых не может быть равен $2500, $3500 или $7000
+select LAST_NAME,JOB_ID,SALARY from EMPLOYEES where (JOB_ID like 'SA_REP' or JOB_ID like 'ST_CLERK') and (SALARY != 2500 and SALARY != 3500 and SALARY != 7000)
+
+/**/
+
+Получите фамилии, оклады и комиссионные всех служащих, у которых сумма комиссионных составляет 20 %.
+select LAST_NAME,SALARY,COMMISSION_PCT from EMPLOYEES where COMMISSION_PCT = 0.2
+
+/**/
+
+Напишите запрос для вывода текущей даты. Назовите столбец Date.
+select current_date as "Date" from dual
+
+/**/
+
+Отделу HR требуется отчет, в котором приводится номер служащего, его фамилия, оклад и новый оклад, повышенный на 15% и округленный до целого. Столбец в отчете, содержащий новый оклад, должен иметь имя New Salary.
+select EMPLOYEE_ID, LAST_NAME, SALARY, round(SALARY * 1.15) as "New Salary" from employees
+
+/**/
+
+Отделу HR требуется отчет, в котором приводится номер служащего, его фамилия, оклад и новый оклад, повышенный на 15% и округленный до целого. Столбец в отчете, содержащий новый оклад, должен иметь имя New Salary. Добавьте еще один столбец, который будет содержать результат вычитания старого оклада из нового. Назовите столбец Increase.
+select EMPLOYEE_ID, LAST_NAME, SALARY, round(SALARY * 1.15) as "New Salary", ((SALARY * 1.15) - SALARY) as "Increase" from employees
+
+/**/
+
+Выведите фамилии служащих (первая буква каждой фамилии должна быть заглавной, а остальные - строчными) и длину каждой фамилии для тех служащих, фамилия которых начинается с символа J, A или M. Присвойте соответствующие заголовки столбцам. Отсортируйте результат по фамилиям служащих.
+select INITCAP(LAST_NAME), LENGTH(LAST_NAME) from employees where LAST_NAME like 'J%' or LAST_NAME like 'A%' or LAST_NAME like 'M%' order by LAST_NAME
+
+
+
+
+
+
+
 
 
 
