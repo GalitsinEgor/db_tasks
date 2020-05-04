@@ -181,6 +181,73 @@ FROM hr.employees;
 
 проверить
 
+/**/
+
+По каждому служащему выведите фамилию, дату найма и день недели (на английском языке), когда он был нанят на работу. Назовите последний столбец DAY. Отсортируйте результаты по дням недели, начиная с понедельника.
+select LAST_NAME, HIRE_DATE, (to_char(HIRE_DATE, 'DAY')) as Day from hr.EMPLOYEES order by mod(to_char(HIRE_DATE, 'D') + 5, 7)
+
+не работает 
+
+/**/
+
+Напишите запрос для вывода фамилии и суммы комиссионных каждого служащего. Если служащий не зарабатывает комиссионных, укажите в столбце “No Commission.” Назовите столбец COMM.
+select last_name, NVL(to_char(commission_pct,'fm.99'),'No Commission')COMM from employees 
+
+/**/
+
+Используя функцию DECODE, напишите запрос для отображения должности сотрудника и ее разряда (grade). Разряд каждого типа должности JOB_ID приведен в таблице:
+Должность Разряд
+AD_PRES A
+ST_MAN B
+IT_PROG C
+SA_REP D
+ST_CLERK E
+Другая 0
+
+select JOB_ID, DECODE(JOB_ID, 
+                    'AD_PRES', 'A',
+                    'ST_MAN', 'B',
+                    'IT_PROG', 'C',
+                    'SA_REP', 'D',
+                    'ST_CLERK', 'E',
+                    '0') result
+from employees 
+
+/**/
+
+Напишите запрос для вывода самого высокого, самого низкого и среднего оклада по всем служащим, а также суммы всех окладов. Назовите столбцы Maximum, Minimum, Sum и Average. Округлите суммы до ближайшего целого значения.
+select round(MAX(SALARY)) as Maximum, round(MIN(SALARY)) as Minimum, round(SUM(SALARY)) as Sum, round(AVG(SALARY)) as Average from hr.EMPLOYEES 
+
+не работает
+
+/**/
+
+Напишите запрос для вывода должности и количества служащих, занимающих каждую должность. Отсортируйте результат по должностям в порядке возрастания.
+select JOB_ID, count(EMPLOYEE_ID) from EMPLOYEES group by JOB_ID order by JOB_ID
+
+/**/
+
+Получите количество служащих, имеющих подчиненных, без их перечисления. Назовите столбец Number of Managers. Подсказка: используйте столбец MANAGER_ID для определения числа менеджеров.
+SELECT COUNT (DISTINCT manager_id) "Number of Managers"
+FROM employees
+
+/**/
+
+Напишите запрос для вывода разности между самым высоким и самым низким окладами. Назовите столбец DIFFERENCE.
+select (MAX(SALARY) - MIN(SALARY)) as DIFFERENCE from EMPLOYEES
+
+/**/
+
+Напишите запрос для вывода номера каждого менеджера и заработной платы самого низкооплачиваемого из его подчиненных. Исключите всех, для которых неизвестны их менеджеры. Исключите все группы, где минимальный оклад составляет менее $6000. Отсортируйте выходные строки в порядке убывания оклада.
+select manager_id, min(SALARY) from employees
+where MANAGER_ID is not null
+group by manager_id
+having  min(SALARY) > 6000 
+order by min(SALARY) desc
+
+/**/
+
+
 
 
 
