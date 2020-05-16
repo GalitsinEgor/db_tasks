@@ -247,6 +247,287 @@ order by min(SALARY) desc
 
 /**/
 
+Напишите запрос для вывода общего количества служащих и количества служащих, нанятых в 1995, 1996, 1997 и 1998 годах. Дайте соответствующие заголовки столбцам
+select  
+COUNT(*),
+COUNT(CASE WHEN EXTRACT(year FROM HIRE_DATE) = 1995 THEN 1 END) as "1995",
+COUNT(CASE WHEN EXTRACT(year FROM HIRE_DATE) = 1996 THEN 1 END) as "1996",
+COUNT(CASE WHEN EXTRACT(year FROM HIRE_DATE) = 1997 THEN 1 END) as "1997",
+COUNT(CASE WHEN EXTRACT(year FROM HIRE_DATE) = 1998 THEN 1 END) as "1998"
+from EMPLOYEES
+
+/**/
+
+Создайте отчет, при выполнении которого выдаются адреса всех отделов. Используйте таблицы LOCATIONS и COUNTRIES. Выведите код местоположения, адрес (street_address), город, штат или провинцию, а также страну. Для получения результатов используйте натуральное соединение.
+
+select LOCATION_ID,STREET_ADDRESS,CITY,STATE_PROVINCE,COUNTRY_NAME from hr.DEPARTMENTS 
+NATURAL  join hr.COUNTRIES 
+NATURAL join hr.LOCATIONS 
+
+/**/
+
+Отделу HR необходим отчет о всех служащих. Напишите запрос для вывода фамилии, номера отдела и названия отдела для всех служащих. Отсортируйте по второму полю.
+select emp.LAST_NAME,emp.DEPARTMENT_ID,dep.DEPARTMENT_NAME from EMPLOYEES emp
+join DEPARTMENTS dep
+on emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+order by emp.DEPARTMENT_ID
+
+/**/
+
+Отделу HR необходим отчет о сотрудниках в Торонто. Напишите запрос для вывода фамилии, должности, номера отдела и названия отдела всех служащих, работающих в городе Toronto.
+select emp.LAST_NAME, emp.JOB_ID, emp.DEPARTMENT_ID, dep.DEPARTMENT_NAME from EMPLOYEES emp
+join DEPARTMENTS dep
+on emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+join LOCATIONS lct
+on dep.LOCATION_ID = lct.LOCATION_ID
+where lct.CITY like 'Toronto'
+
+/**/
+
+Выведите фамилии и номера служащих вместе с фамилиями и номерами их менеджеров. Назовите столбцы Employee, Emp#, Manager и Mgr#. Отсортируйте по номеру служащего.
+select emp.LAST_NAME as Employee, emp.EMPLOYEE_ID as Emp#, mngr.LAST_NAME as Manager, mngr.EMPLOYEE_ID as Mgr# from employees emp
+join employees mngr
+on emp.MANAGER_ID = mngr.EMPLOYEE_ID
+order by emp.EMPLOYEE_ID
+
+/**/
+
+Для отдела HR необходимы сведения о том, какие сотрудники были наняты после приема на работу после Davies. Создайте запрос для вывода фамилий и дат найма всех таких служащих.
+select LAST_NAME, HIRE_DATE from employees 
+where HIRE_DATE > (select HIRE_DATE from employees where LAST_NAME like 'Davies')
+
+/**/
+
+Отделу HR необходимы сведения о всех служащих, нанятых раньше своих менеджеров. Выведите фамилии и даты найма таких служащих, а также фамилии и даты найма их менеджеров.
+select emp.LAST_NAME, emp.HIRE_DATE, mngr.LAST_NAME, mngr.HIRE_DATE from employees emp
+join employees mngr
+on emp.MANAGER_ID = mngr.EMPLOYEE_ID
+where emp.HIRE_DATE < mngr.HIRE_DATE
+
+/**/
+
+Отделу HR необходимы данные о фамилиях и даты найма сотрудников, работающих в одном отделе с King (сам этот служащий не выводится).
+select LAST_NAME, HIRE_DATE from employees
+where DEPARTMENT_ID = (select DEPARTMENT_ID from employees where LAST_NAME like 'King' and ROWNUM = 1)
+and LAST_NAME not like 'King'
+
+конечно же не работает
+
+/**/
+
+Создайте запрос для вывода номеров,и фамилий, и окладов всех служащих, оклад которых выше среднего. Отсортируйте выходные данные в порядке увеличения окладов.
+select EMPLOYEE_ID,LAST_NAME,SALARY from employees 
+where SALARY > (select AVG(SALARY) from employees)
+order by SALARY
+
+/**/
+
+Создайте запрос для вывода номеров и фамилий всех служащих, работающих в одном отделе с любым служащим, фамилия которого содержит букву “u”.
+select EMPLOYEE_ID, LAST_NAME from employees 
+where DEPARTMENT_ID IN (select DEPARTMENT_ID from employees where LAST_NAME like '%u%')
+
+/**/
+
+Отделу HR необходим отчет, в котором выводятся фамилии, номера отделов и должности служащих, идентификатор местоположения отдела которых равен 1700.
+select emp.LAST_NAME,emp.DEPARTMENT_ID,emp.JOB_ID from employees emp
+join DEPARTMENTS dep
+on emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+where dep.LOCATION_ID = 1700
+
+/**/
+
+Подготовьте отчет для отдела HR, в котором выводится список фамилий и окладов всех служащих, подчиненных Кингу (King).
+select emp.LAST_NAME, emp.SALARY from employees emp
+join employees mngr
+on emp.MANAGER_ID = mngr.EMPLOYEE_ID
+where mngr.LAST_NAME like 'King'
+
+/**/
+
+Подготовьте отчет для отдела HR, в котором выводится номер отдела, фамилия и код должности для каждого служащего, работающего в администрации (department_name = 'Executive')
+select emp.DEPARTMENT_ID, emp.LAST_NAME, emp.JOB_ID from EMPLOYEES emp
+join DEPARTMENTS dep
+on emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+where DEPARTMENT_NAME like 'Executive'
+
+/**/
+
+Создайте запрос для вывода номеров и фамилий всех служащих и их оклад, работающих в одном отделе с любым служащим, фамилия которого содержит букву “u” и при условии, что оклады превышают средний.
+select EMPLOYEE_ID, LAST_NAME, SALARY from employees 
+where 
+SALARY > (select AVG(SALARY) from employees)
+and
+DEPARTMENT_ID IN (select DEPARTMENT_ID from employees where LAST_NAME like '%u%')
+
+/**/
+
+Отделу по работе с персоналом (Human Resources, HR) необходим список номеров отделом, в которых нет сотрудников с идентификатором должности ST_CLERK. Используйте операторы над множествами для создания отчета.
+select dep.DEPARTMENT_ID  from DEPARTMENTS dep
+minus
+select DEPARTMENT_ID from EMPLOYEES where JOB_ID like 'ST_CLERK'
+
+/**/
+
+Отделу HR необходим перечень стран, в которых не располагаются подразделения компании. Выведите идентификаторы и названия таких стран.
+select COUNTRY_ID, COUNTRY_NAME from COUNTRIES
+minus 
+select loc.COUNTRY_ID, COUNTRY_NAME from DEPARTMENTS dep
+    join LOCATIONS loc
+    on loc.LOCATION_ID = dep.LOCATION_ID
+    join COUNTRIES cnt
+    on cnt.COUNTRY_ID = loc.COUNTRY_ID
+	
+	не работает
+	
+/**/
+
+Используя операторы над множествами, выведите список должностей отделов 10, 50 и 20 в таком же порядке отделов. Включите в отчет столбцы job_id и department_id
+
+/*select DISTINCT emp.JOB_ID, emp.DEPARTMENT_ID from hr.EMPLOYEES emp
+
+where emp.DEPARTMENT_ID = 10 or emp.DEPARTMENT_ID = 50 or emp.DEPARTMENT_ID = 20
+
+order by decode(emp.DEPARTMENT_ID, '10', 1, '50', 2, '20', 3);*/
+
+
+SELECT job_id, department_id
+
+FROM (SELECT job_id, department_id
+
+FROM hr.EMPLOYEES
+
+WHERE department_id IN (10, 20, 50)
+
+INTERSECT
+
+SELECT job_id, department_id
+
+FROM hr.EMPLOYEES)
+
+ORDER BY decode (department_id, 10,1, 20,3, 50,2);
+ 
+ не рабоатает
+ 
+ /**/
+ 
+Выведите номер сотрудника и идентификатор его должности, если его текущая должность совпадает с той, которую он уже занимал, работая в компании
+Select employee_id, job_id
+
+From employees
+
+Intersect
+
+Select employee_id, job_id
+
+From job_history
+
+/**/
+
+HR необходима информация о всех клерках (ST_CLERK), устроенных на работу после 1997 года.
+
+select * from EMPLOYEES
+where
+JOB_ID like 'ST_CLERK'
+and
+EXTRACT(year FROM HIRE_DATE) > 1997
+
+/**/
+
+HR необходим отчёт о сотрудниках и стаже их работы. Отчёт должен включать в себя поля: фамилия, полных лет работы и полных месяцев работы. Для лет и месяцев дать имена YEARS и MONTHS. Полученные данные необходимо отсортировать так, чтобы сверху списка отображался сотрудник с самым большим стажем работы.
+select LAST_NAME, (EXTRACT(year FROM CURRENT_DATE) - EXTRACT(year FROM HIRE_DATE)) as YEARS, ROUND(MONTHS_BETWEEN(CURRENT_DATE, HIRE_DATE)) as MONTHS from hr.EMPLOYEES
+order by MONTHS desc
+
+не работает 
+
+/**/
+
+Отобразить фамилии сотрудников, которые начинаются на букву J, K, L или M.
+select LAST_NAME from EMPLOYEES
+where 
+LAST_NAME like 'J%'
+or
+LAST_NAME like 'K%'
+or
+LAST_NAME like 'L%'
+or
+LAST_NAME like 'M%'
+
+/**/
+
+Вывести фамилию и день недели всех сотрудников, день недели устройства которых является самым частым в компании
+select LAST_NAME, TO_CHAR(HIRE_DATE, 'DAY') from EMPLOYEES
+where TO_CHAR(HIRE_DATE, 'DAY') in (select MAX(TO_CHAR(HIRE_DATE, 'DAY')) from EMPLOYEES)
+
+/**/
+
+Создайте отчёт, в который включены номер отдела, название отдела, идентификатор расположения и количество сотрудников в этом отделе.
+
+Убедитесь, что результат запроса также содержит отделы без сотрудников.
+
+select dep.DEPARTMENT_ID, dep.DEPARTMENT_NAME, dep.LOCATION_ID, (select count(EMPLOYEE_ID) from EMPLOYEES emp where emp.DEPARTMENT_ID = dep.DEPARTMENT_ID)
+from DEPARTMENTS dep
+
+/**/
+
+Отделу по работе с персоналом (Human Resources, HR) необходим список номеров отделом, в которых нет сотрудников с идентификатором должности FI_ACCOUNT. Используйте операторы над множествами для создания отчета.
+
+select dep.DEPARTMENT_ID  from DEPARTMENTS dep
+minus
+select DEPARTMENT_ID from EMPLOYEES where JOB_ID like 'FI_ACCOUNT'
+
+/**/
+
+Отделу HR необходим отчет, в котором выводится следующее:
+- фамилии и отделы всех сотрудников из таблицы EMPLOYEES, независимо от того, относятся ли они к какому-то отделу или нет;
+- следом за ними номера и наименования всех отделов из таблицы DEPARTMENTS, независимо от того, есть ли в них сотрудники или нет. Для получения отчета используйте конструкцию UNION.
+Названия колонок оставьте оригинальные (т.е. как в таблицах).
+
+select LAST_NAME, DEPARTMENT_ID, null from EMPLOYEES
+UNION
+select null, DEPARTMENT_ID, DEPARTMENT_NAME from DEPARTMENTS
+
+/**/
+Одной командой SELECT выбрать сотрудников, для которых - в таблице истории занятия должностей зафиксированы переходы на другую должность и - в таблице истории занятия должностей отсутствуют сведения об их первой должности, которую они занимали при приеме на работу в компанию. В результат вывести: - идентификатор сотрудника, - фамилию сотрудника, - дата, когда сотрудник был принят на работу, - идентификатор должности, которую занимает сотрудник, - идентификатор подразделения, к которому в данный момент приписан сотрудник. Результат отсортировать по возрастанию по полям: - дата, когда сотрудник был принят на работу, - фамилия сотрудника.
+
+
+SELECT a.employee_id, a.last_name, a.hire_date, a.job_id, a.department_id 
+FROM (SELECT * FROM employees
+      WHERE employee_id IN 
+         (SELECT DISTINCT employee_id FROM job_history) )a 
+WHERE a.hire_date NOT IN 
+   (SELECT start_date FROM job_history
+    WHERE employee_id = a.employee_id)
+ORDER BY a.hire_date, a.last_name
+
+/**/
+
+По каждому служащему выведите фамилию, дату найма и день недели (на английском языке), когда он был нанят на работу. Назовите последний столбец DAY. Отсортируйте результаты по дням недели, начиная с понедельника.
+
+select LAST_NAME, HIRE_DATE, INITCAP(TO_CHAR(HIRE_DATE, 'DAY')) as DAY from hr.employees
+order by decode(TO_CHAR(HIRE_DATE, 'D'), 2,1, 3,2, 4,3, 5,4, 6,5, 7,6, 1,7) 
+
+не работает
+/**/
+
+Выведите фамилии и номера служащих вместе с фамилиями и номерами их менеджеров. Назовите столбцы Employee, Emp#, Manager и Mgr#. Отсортируйте по номеру служащего.
+
+select emp.last_name as Employee, emp.employee_id as "Emp#", emp2.last_name as "Manager ", emp2.employee_id as "Mgr#" from employees emp
+join employees emp2
+on (emp.manager_id=emp2.employee_id) order by emp.employee_id
+
+/**/
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
