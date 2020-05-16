@@ -517,6 +517,19 @@ on (emp.manager_id=emp2.employee_id) order by emp.employee_id
 
 /**/
 
+Напишите запрос для вывода самого высокого, самого низкого и среднего оклада по всем служащим, а также суммы всех окладов. Назовите столбцы Maximum, Minimum, Sum и Average. Округлите суммы до ближайшего целого значения.
+select MAX(SALARY) as Maximum , MIN(SALARY) as Minimum, SUM(SALARY) as Sum, ROUND(AVG(SALARY)) as Average from EMPLOYEES
+
+/**/
+
+Получите самый низкий, самый высокий, сумму окладов и средний оклад отдельно по каждой должности.
+
+select job_id, max(salary) "Maximum", min(salary) "Minimum", sum(salary) "Sum", round(avg(salary)) "Average"
+
+from employees group by job_id
+
+/**/
+
 
 
 
